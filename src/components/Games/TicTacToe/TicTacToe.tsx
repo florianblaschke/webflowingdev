@@ -1,10 +1,10 @@
 "use client";
 
+import { Button } from "@/components/ui/Button";
+import { useToast } from "@/components/ui/Use-toast";
+import { ToastAction } from "@radix-ui/react-toast";
 import { useEffect, useState } from "react";
 import Slot from "./Slot";
-import { Button } from "@/components/ui/Button";
-import { toast, useToast } from "@/components/ui/Use-toast";
-import { ToastAction } from "@radix-ui/react-toast";
 
 const slots = Array.from({ length: 9 }).map((x, i) => ({ id: i, slot: "" }));
 
@@ -31,8 +31,13 @@ export default function Game() {
   const [winCount, setWinCount] = useState({ xCount: 0, oCount: 0 });
   const [playerWon, setPlayerWon] = useState("");
   const [play, setPlay] = useState(false);
-  const { toast, toasts } = useToast();
+  const { toast } = useToast();
 
+  function reset() {
+    setWin(false);
+    setPlayerWon("");
+    setField(slots);
+  }
   useEffect(() => {
     winningCombos.forEach((array) => {
       let xWins = array.every((cell) => field[cell].slot === "X");
@@ -80,24 +85,93 @@ export default function Game() {
         });
       }
     });
-  }, [field]);
 
-  function reset() {
-    setWin(false);
-    setPlayerWon("");
-    setField(slots);
-  }
+    if (win) return;
+    if (turn === players.y) {
+      //find all slots marked by X
+      const slotsFromX = field.filter((entry) => entry.slot === "X");
+      //determine if X is near win and make move if necessary
+      let globalCombo: number[] = [];
+
+      winningCombos.forEach((arr) => {
+        console.log("i am checking for winning combos for x");
+        let comboBreak: number[] = [];
+        arr.map((cell) => {
+          let step = slotsFromX.find((slot) => slot.id === cell);
+          if (step) comboBreak.push(step.id);
+          //break line if x has 2
+          if (comboBreak.length === 2) {
+            // get cell from Combo which is not taken || cell is e.g 0 || arr is [0,1,2] || comboBreak is [0,1]
+            const missingCell = arr.filter(
+              (num) => num !== comboBreak[0] && num !== comboBreak[1]
+            );
+            //ai makes turn
+            const aiTurn = field.map((entry) => {
+              if (entry.id === missingCell[0]) {
+                setTurn(players.x);
+                return { ...entry, slot: "O" };
+              }
+              return entry;
+            });
+            return setField(aiTurn);
+          }
+        });
+        globalCombo = comboBreak;
+        if (comboBreak.length === 2) return;
+      });
+
+      //ai move if no combo
+      const slotsFromO = field.filter((entry) => entry.slot === "O");
+      //check if ai has a chance to win
+      if (globalCombo.length < 1) {
+        console.log("i am checking if I can win");
+        winningCombos.forEach((arr) => {
+          arr.map((cell) => {
+            let winChance: number[] = [];
+            let step = slotsFromO.find((slot) => slot.id === cell);
+            console.log("step", step);
+            if (step) winChance.push(step.id);
+            //go for Win
+            if (winChance.length === 2) {
+              console.log("i try to win");
+              console.log("winchance", winChance);
+              const missingCell = arr.filter(
+                (num) => num !== winChance[0] && num !== winChance[1]
+              );
+              const checkForTaken = field.find(
+                (entry) => entry.id === missingCell[0]
+              );
+              if (checkForTaken?.slot === "") {
+                const aiWinsTurn = field.map((entry) => {
+                  if (entry.id === missingCell[0] && entry.slot === "") {
+                    return { ...entry, slot: "O" };
+                  }
+                  return entry;
+                });
+                setField(aiWinsTurn);
+              }
+            }
+          });
+        });
+      }
+      //no chance winning or no need to defend
+      const checkForEmptySlots = field.filter((entry) => entry.slot === "");
+      let rdmNum = Math.floor(Math.random() * checkForEmptySlots.length);
+      console.log("rdmNum", rdmNum);
+      console.log("emptySlots", checkForEmptySlots);
+      const newField = field.map((entry) => {
+        if (entry.id === checkForEmptySlots[rdmNum].id) {
+          return { ...entry, slot: "O" };
+        }
+        return entry;
+      });
+      setField(newField);
+      setTurn(players.x);
+    }
+  }, [field]);
 
   return (
     <>
-      {/*   <Button
-        className="bg-black border-green-100 border"
-        onClick={() => console.log(toasts)}
-      >
-        <span className="from-green-300 to-green-200 bg-clip-text bg-gradient-to-br text-transparent">
-          Show me Toast
-        </span>
-      </Button> */}
       {!play && (
         <div>
           <Button
