@@ -39,9 +39,11 @@ export default function Game() {
     setField(slots);
   }
   useEffect(() => {
+    if (win) return;
     winningCombos.forEach((array) => {
       let xWins = array.every((cell) => field[cell].slot === "X");
       let oWins = array.every((cell) => field[cell].slot === "O");
+
       if (xWins) {
         setWinCount({ ...winCount, xCount: winCount.xCount + 1 });
         setWin(true);
@@ -86,29 +88,73 @@ export default function Game() {
       }
     });
 
-    if (win) return;
-    if (turn === players.y) {
-      //find all slots marked by X
+    if (turn === players.y && !win) {
+      //find all slots marked by X and O
       const slotsFromX = field.filter((entry) => entry.slot === "X");
-      //determine if X is near win and make move if necessary
-      let globalCombo: number[] = [];
+      const slotsFromO = field.filter((entry) => entry.slot === "O");
 
-      winningCombos.forEach((arr) => {
-        console.log("i am checking for winning combos for x");
+      //determine if X is near win
+      let winningChancesX = winningCombos.map((arr) => {
         let comboBreak: number[] = [];
-        arr.map((cell) => {
+        arr.map((cell, i) => {
           let step = slotsFromX.find((slot) => slot.id === cell);
           if (step) comboBreak.push(step.id);
-          //break line if x has 2
-          if (comboBreak.length === 2) {
+        });
+        return comboBreak;
+      });
+      let winX = winningChancesX.some((entry) => entry.length === 2);
+      //determine if O is near win
+      let winningChancesO = winningCombos.map((arr) => {
+        let winChance: number[] = [];
+        arr.map((cell) => {
+          let step = slotsFromO.find((slot) => slot.id === cell);
+          if (step) winChance.push(step.id);
+        });
+        return winChance;
+      });
+      let winO = winningChancesO.some((entry) => entry.length === 2);
+
+      //The Moves
+
+      //Countermove
+      if (winX) {
+        const possibleCombos = winningChancesX.filter(
+          (entry) => entry.length === 2
+        );
+        //Get missing Cell from all possible Combos - does not work
+        const winCombs = winningCombos.map((arr) => {
+          const stepsFromWin = possibleCombos.map((poss) => {
+            return arr.filter((num) => num !== poss[0] && num !== poss[1]);
+          });
+          return stepsFromWin;
+        });
+        //Filter winCombs for length 1 to get field for Countermove
+        const needToCounter = winCombs
+          .map((entry) => entry.filter((cell) => cell.length === 1))
+          .flat(2);
+
+        console.log("need", needToCounter);
+        //Check if needToCounter fields are open and set new Field
+        const counterMove = field.map((entry) => {});
+
+        /*   setField(counterMove);
+        setTurn(players.x); */
+        console.log(counterMove);
+      }
+      //break line if x has 2
+      /*   if (comboBreak.length === 2) {
+            console.log("I found a winnig combo");
+            combo = true;
             // get cell from Combo which is not taken || cell is e.g 0 || arr is [0,1,2] || comboBreak is [0,1]
             const missingCell = arr.filter(
               (num) => num !== comboBreak[0] && num !== comboBreak[1]
             );
+            console.log("missing", missingCell);
             //ai makes turn
             const aiTurn = field.map((entry) => {
               if (entry.id === missingCell[0]) {
                 setTurn(players.x);
+                console.log("i set new Field");
                 return { ...entry, slot: "O" };
               }
               return entry;
@@ -116,25 +162,20 @@ export default function Game() {
             return setField(aiTurn);
           }
         });
-        globalCombo = comboBreak;
-        if (comboBreak.length === 2) return;
-      });
+        console.log("I set globalCombo", globalCombo);
+        globalCombo = comboBreak; */
 
       //ai move if no combo
-      const slotsFromO = field.filter((entry) => entry.slot === "O");
+      /*  const slotsFromO = field.filter((entry) => entry.slot === "O");
       //check if ai has a chance to win
       if (globalCombo.length < 1) {
-        console.log("i am checking if I can win");
         winningCombos.forEach((arr) => {
           arr.map((cell) => {
             let winChance: number[] = [];
             let step = slotsFromO.find((slot) => slot.id === cell);
-            console.log("step", step);
             if (step) winChance.push(step.id);
             //go for Win
             if (winChance.length === 2) {
-              console.log("i try to win");
-              console.log("winchance", winChance);
               const missingCell = arr.filter(
                 (num) => num !== winChance[0] && num !== winChance[1]
               );
@@ -155,20 +196,21 @@ export default function Game() {
         });
       }
       //no chance winning or no need to defend
-      const checkForEmptySlots = field.filter((entry) => entry.slot === "");
-      let rdmNum = Math.floor(Math.random() * checkForEmptySlots.length);
-      console.log("rdmNum", rdmNum);
-      console.log("emptySlots", checkForEmptySlots);
-      const newField = field.map((entry) => {
-        if (entry.id === checkForEmptySlots[rdmNum].id) {
-          return { ...entry, slot: "O" };
-        }
-        return entry;
-      });
-      setField(newField);
-      setTurn(players.x);
+      if (globalCombo.length !== 2) {
+        console.log("i am in rdmfield");
+        const checkForEmptySlots = field.filter((entry) => entry.slot === "");
+        let rdmNum = Math.floor(Math.random() * checkForEmptySlots.length);
+        const newField = field.map((entry) => {
+          if (entry.id === checkForEmptySlots[rdmNum].id) {
+            return { ...entry, slot: "O" };
+          }
+          return entry;
+        });
+        setField(newField);
+        setTurn(players.x);
+      } */
     }
-  }, [field]);
+  }, [turn]);
 
   return (
     <>
@@ -220,3 +262,13 @@ export default function Game() {
     </>
   );
 }
+
+/* const cell = arr.map((num) => {
+  let solution: any = [];
+  possibleCombos.map((poss) => {
+    if (num !== poss[0] && num !== poss[1]) {
+      return solution.push(num);
+    }
+    return solution;
+  });
+  return solution; */
