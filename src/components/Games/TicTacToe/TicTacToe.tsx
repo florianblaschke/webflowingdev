@@ -71,6 +71,7 @@ export default function Game() {
               altText="New Round"
               onClick={() => {
                 setPlay(true);
+                setTurn(players.x);
                 reset();
               }}
             >
@@ -218,14 +219,19 @@ export default function Game() {
               );
             })
             .flat();
-          const goForWin = field.map((entry) => {
-            if (entry.id === fieldsOpen[0]) {
-              return { ...entry, slot: "O" };
-            }
-            return entry;
-          });
-          setField(goForWin);
-          setTurn(players.x);
+          if (fieldsOpen.length === 0) {
+            rdmMove();
+          }
+          if (fieldsOpen.length > 0) {
+            const goForWin = field.map((entry) => {
+              if (entry.id === fieldsOpen[0]) {
+                return { ...entry, slot: "O" };
+              }
+              return entry;
+            });
+            setField(goForWin);
+            setTurn(players.x);
+          }
         }
       }
 
