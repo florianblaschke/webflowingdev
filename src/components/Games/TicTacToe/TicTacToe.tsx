@@ -51,14 +51,18 @@ export default function Game() {
 
   function reset() {
     setWin(false);
+    setTurn(players.x);
     setPlayerWon("");
     setField(slots);
   }
   useEffect(() => {
-    if (win) return;
+    /* if (win) return; */
+    let xWins;
+    let oWins;
+    let openSlots;
     winningCombos.forEach((array) => {
-      let xWins = array.every((cell) => field[cell].slot === "X");
-      let oWins = array.every((cell) => field[cell].slot === "O");
+      xWins = array.every((cell) => field[cell].slot === "X");
+      oWins = array.every((cell) => field[cell].slot === "O");
       let openSlots = field.filter((entry) => entry.slot === "");
 
       if (openSlots.length === 0 && !xWins && !oWins) {
@@ -71,7 +75,6 @@ export default function Game() {
               altText="New Round"
               onClick={() => {
                 setPlay(true);
-                setTurn(players.x);
                 reset();
               }}
             >
@@ -125,7 +128,7 @@ export default function Game() {
       }
     });
 
-    if (turn === players.y && !win) {
+    if (turn === players.y && !xWins && !oWins) {
       //find all slots marked by X and O
       const slotsFromX = field.filter((entry) => entry.slot === "X");
       const slotsFromO = field.filter((entry) => entry.slot === "O");
@@ -240,7 +243,7 @@ export default function Game() {
         rdmMove();
       }
     }
-  }, [field]);
+  }, [turn]);
 
   return (
     <>
