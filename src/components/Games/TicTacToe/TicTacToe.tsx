@@ -33,6 +33,22 @@ export default function Game() {
   const [play, setPlay] = useState(false);
   const { toast } = useToast();
 
+  function rdmMove() {
+    //Check for open slots
+    const openSlots = field.filter((entry) => entry.slot === "");
+    if (openSlots.length === 0) return;
+    //Make move on open rdm slot
+    const rdm = Math.floor(Math.random() * openSlots.length);
+    const move = field.map((entry) => {
+      if (entry.id === openSlots[rdm].id) {
+        return { ...entry, slot: "O" };
+      }
+      return entry;
+    });
+    setField(move);
+    setTurn(players.x);
+  }
+
   function reset() {
     setWin(false);
     setPlayerWon("");
@@ -43,6 +59,26 @@ export default function Game() {
     winningCombos.forEach((array) => {
       let xWins = array.every((cell) => field[cell].slot === "X");
       let oWins = array.every((cell) => field[cell].slot === "O");
+      let openSlots = field.filter((entry) => entry.slot === "");
+
+      if (openSlots.length === 0 && !xWins && !oWins) {
+        return toast({
+          variant: "hulk",
+          title: "That's a draw!",
+          description: "You are on par with AI!",
+          action: (
+            <ToastAction
+              altText="New Round"
+              onClick={() => {
+                setPlay(true);
+                reset();
+              }}
+            >
+              New Round?
+            </ToastAction>
+          ),
+        });
+      }
 
       if (xWins) {
         setWinCount({ ...winCount, xCount: winCount.xCount + 1 });
@@ -50,8 +86,8 @@ export default function Game() {
         setPlayerWon("X");
         const x = toast({
           variant: "hulk",
-          title: "X won!",
-          description: "X is dominating!",
+          title: "You won!",
+          description: "You are dominating!",
           action: (
             <ToastAction
               altText="New Round"
@@ -71,8 +107,8 @@ export default function Game() {
         setPlayerWon("O");
         const x = toast({
           variant: "hulk",
-          title: "O won!",
-          description: "O gives X a shellacking!",
+          title: "AI beat you!",
+          description: "World domination is next!",
           action: (
             <ToastAction
               altText="New Round"
@@ -96,7 +132,7 @@ export default function Game() {
       //determine if X is near win
       let winningChancesX = winningCombos.map((arr) => {
         let comboBreak: number[] = [];
-        arr.map((cell, i) => {
+        arr.map((cell) => {
           let step = slotsFromX.find((slot) => slot.id === cell);
           if (step) comboBreak.push(step.id);
         });
@@ -115,13 +151,12 @@ export default function Game() {
       let winO = winningChancesO.some((entry) => entry.length === 2);
 
       //The Moves
-
       //Countermove
       if (winX) {
         const possibleCombos = winningChancesX.filter(
           (entry) => entry.length === 2
         );
-        //Get missing Cell from all possible Combos - does not work
+        //Get missing Cell from all possible Combos
         const winCombs = winningCombos.map((arr) => {
           const stepsFromWin = possibleCombos.map((poss) => {
             return arr.filter((num) => num !== poss[0] && num !== poss[1]);
@@ -132,85 +167,74 @@ export default function Game() {
         const needToCounter = winCombs
           .map((entry) => entry.filter((cell) => cell.length === 1))
           .flat(2);
-
-        console.log("need", needToCounter);
         //Check if needToCounter fields are open and set new Field
-        const counterMove = field.map((entry) => {});
-
-        /*   setField(counterMove);
-        setTurn(players.x); */
-        console.log(counterMove);
-      }
-      //break line if x has 2
-      /*   if (comboBreak.length === 2) {
-            console.log("I found a winnig combo");
-            combo = true;
-            // get cell from Combo which is not taken || cell is e.g 0 || arr is [0,1,2] || comboBreak is [0,1]
-            const missingCell = arr.filter(
-              (num) => num !== comboBreak[0] && num !== comboBreak[1]
+        const fieldsOpen = field
+          .map((entry) => {
+            return needToCounter.filter(
+              (cell) => entry.id === cell && entry.slot === ""
             );
-            console.log("missing", missingCell);
-            //ai makes turn
-            const aiTurn = field.map((entry) => {
-              if (entry.id === missingCell[0]) {
-                setTurn(players.x);
-                console.log("i set new Field");
-                return { ...entry, slot: "O" };
-              }
-              return entry;
-            });
-            return setField(aiTurn);
-          }
-        });
-        console.log("I set globalCombo", globalCombo);
-        globalCombo = comboBreak; */
-
-      //ai move if no combo
-      /*  const slotsFromO = field.filter((entry) => entry.slot === "O");
-      //check if ai has a chance to win
-      if (globalCombo.length < 1) {
-        winningCombos.forEach((arr) => {
-          arr.map((cell) => {
-            let winChance: number[] = [];
-            let step = slotsFromO.find((slot) => slot.id === cell);
-            if (step) winChance.push(step.id);
-            //go for Win
-            if (winChance.length === 2) {
-              const missingCell = arr.filter(
-                (num) => num !== winChance[0] && num !== winChance[1]
-              );
-              const checkForTaken = field.find(
-                (entry) => entry.id === missingCell[0]
-              );
-              if (checkForTaken?.slot === "") {
-                const aiWinsTurn = field.map((entry) => {
-                  if (entry.id === missingCell[0] && entry.slot === "") {
-                    return { ...entry, slot: "O" };
-                  }
-                  return entry;
-                });
-                setField(aiWinsTurn);
-              }
+          })
+          .flat();
+        if (fieldsOpen.length === 0) {
+          rdmMove();
+        }
+        if (fieldsOpen.length > 0) {
+          const counterMove = field.map((entry) => {
+            if (entry.id === fieldsOpen[0]) {
+              return { ...entry, slot: "O" };
             }
+            return entry;
           });
-        });
+          setField(counterMove);
+          setTurn(players.x);
+        }
       }
-      //no chance winning or no need to defend
-      if (globalCombo.length !== 2) {
-        console.log("i am in rdmfield");
-        const checkForEmptySlots = field.filter((entry) => entry.slot === "");
-        let rdmNum = Math.floor(Math.random() * checkForEmptySlots.length);
-        const newField = field.map((entry) => {
-          if (entry.id === checkForEmptySlots[rdmNum].id) {
-            return { ...entry, slot: "O" };
-          }
-          return entry;
+
+      let slotTaken = true;
+      //Move for win
+      if (winO) {
+        const possibleCombos = winningChancesO.filter(
+          (entry) => entry.length === 2
+        );
+        //Get missing Cell from all possible Combos
+        const winCombs = winningCombos.map((arr) => {
+          const stepsFromWin = possibleCombos.map((poss) => {
+            return arr.filter((num) => num !== poss[0] && num !== poss[1]);
+          });
+          return stepsFromWin;
         });
-        setField(newField);
-        setTurn(players.x);
-      } */
+        //Filter winCombs for length 1 to get field for winning Move
+        const possibleWin = winCombs
+          .map((entry) => entry.filter((cell) => cell.length === 1))
+          .flat(2);
+        //Check if possibleWin fields are open and set new Field
+        const slotsOpen = field.filter((entry) => entry.slot === "");
+        slotTaken = slotsOpen.some((entry) => entry.id !== possibleWin[0]);
+        if (slotTaken) {
+          const fieldsOpen = field
+            .map((entry) => {
+              return possibleWin.filter(
+                (cell) => entry.id === cell && entry.slot === ""
+              );
+            })
+            .flat();
+          const goForWin = field.map((entry) => {
+            if (entry.id === fieldsOpen[0]) {
+              return { ...entry, slot: "O" };
+            }
+            return entry;
+          });
+          setField(goForWin);
+          setTurn(players.x);
+        }
+      }
+
+      //Rdm move
+      if (!winX && !winO && slotTaken) {
+        rdmMove();
+      }
     }
-  }, [turn]);
+  }, [field]);
 
   return (
     <>
@@ -262,13 +286,3 @@ export default function Game() {
     </>
   );
 }
-
-/* const cell = arr.map((num) => {
-  let solution: any = [];
-  possibleCombos.map((poss) => {
-    if (num !== poss[0] && num !== poss[1]) {
-      return solution.push(num);
-    }
-    return solution;
-  });
-  return solution; */

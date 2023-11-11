@@ -9,7 +9,7 @@ const apps = ["Beanerd", "Repairdoc", "Matt-Eats"];
 export default function Home() {
   return (
     <>
-      <section className="from-black from-40% to-gray-900 bg-gradient-to-b">
+      <section className="bg-black">
         <h1 className="px-10 pb-10 tracking-tighter text-[2.5rem] md:text-9xl bg-gradient-to-br from-green-400 to-green-100 bg-clip-text text-transparent">
           Frontend and Fullstack Webdevelopment
         </h1>
@@ -23,7 +23,7 @@ export default function Home() {
           </p>
         </article>
       </section>
-      <section className="min-h-fit pb-10 flex flex-col items-center from-gray-900 to-black bg-gradient-to-b">
+      <section className="min-h-fit pb-10 flex flex-col items-center bg-black">
         <h3 className="p-10 text-5xl font-medium tracking-tighter bg-gradient-to-br from-green-400 to-green-100 bg-clip-text text-transparent">
           What I have built so far
         </h3>
@@ -38,7 +38,7 @@ export default function Home() {
       </section>
       <section className="min-h-fit pb-10 flex flex-col justify-center items-center">
         <h3 className="p-10 text-5xl font-medium tracking-tighter bg-gradient-to-br from-green-400 to-green-100 bg-clip-text text-transparent">
-          What I am working with
+          What I like to use
         </h3>
         <TechStack />
       </section>
