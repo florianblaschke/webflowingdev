@@ -50,21 +50,16 @@ export default function Game() {
   }
 
   function reset() {
-    setWin(false);
     setTurn(players.x);
-    setPlayerWon("");
     setField(slots);
+    setPlayerWon("");
+    setWin(false);
   }
   useEffect(() => {
-    /* if (win) return; */
-    let xWins;
-    let oWins;
-    let openSlots;
     winningCombos.forEach((array) => {
-      xWins = array.every((cell) => field[cell].slot === "X");
-      oWins = array.every((cell) => field[cell].slot === "O");
+      const xWins = array.every((cell) => field[cell].slot === "X");
+      const oWins = array.every((cell) => field[cell].slot === "O");
       let openSlots = field.filter((entry) => entry.slot === "");
-
       if (openSlots.length === 0 && !xWins && !oWins) {
         return toast({
           variant: "hulk",
@@ -128,11 +123,17 @@ export default function Game() {
       }
     });
 
-    if (turn === players.y && !xWins && !oWins) {
+    if (turn === players.y) {
       //find all slots marked by X and O
       const slotsFromX = field.filter((entry) => entry.slot === "X");
       const slotsFromO = field.filter((entry) => entry.slot === "O");
 
+      const win = winningCombos.some((array) => {
+        const xWins = array.every((cell) => field[cell].slot === "X");
+        const oWins = array.every((cell) => field[cell].slot === "O");
+        if (xWins || oWins) return true;
+      });
+      if (win) return;
       //determine if X is near win
       let winningChancesX = winningCombos.map((arr) => {
         let comboBreak: number[] = [];
@@ -260,8 +261,8 @@ export default function Game() {
         </div>
       )}
       {play && (
-        <div className="flex  flex-col items-center justify-center gap-2">
-          <div className="flex flex-wrap gap-1 w-[24.5rem] p-0">
+        <div className="flex flex-col items-center justify-center gap-2">
+          <div className="flex flex-wrap gap-1 w-80 md:w-[24.5rem] p-0">
             {field.map((entry) => (
               <Slot
                 key={entry.id}

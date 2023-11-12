@@ -41,9 +41,9 @@ export default function Slot({
   function handleClick() {
     const newField = field.map((entry) => {
       if (entry.id === id && entry.slot === "") {
-        setTurn(turn === players.x ? players.y : players.x);
         return { ...entry, slot: turn.mark };
       }
+      setTurn(turn === players.x ? players.y : players.x);
       return entry;
     });
     setField(newField);
@@ -53,7 +53,7 @@ export default function Slot({
     <div
       /* @ts-ignore */
       onClick={!win ? handleClick : null}
-      className="w-32 h-32 bg-green-100 rounded flex justify-center items-center"
+      className="w-[6.5rem] h-[6.5rem] md:w-32 md:h-32 bg-green-100 rounded flex justify-center items-center"
     >
       {Icons[slot]}
     </div>

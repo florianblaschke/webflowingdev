@@ -28,3 +28,60 @@ export const projects = [
     desc: "Your personal homepage! For your self, your company/restaurant! You name it!",
   },
 ];
+
+export const courses: {
+  id: number;
+  academy: string;
+  time: string;
+  type: string;
+  content: string[];
+}[] = [
+  {
+    id: 1,
+    academy: "neuefische",
+    time: "2023",
+    type: "6 month Bootcamp",
+    content: [
+      "HTML5",
+      "CSS",
+      "JavaScript",
+      "React",
+      "PairProgramming",
+      "Node.js",
+      "NoSQL",
+      "REST",
+      "Shell",
+      "Git",
+      "Tooling",
+      "Agile Workflows",
+    ],
+  },
+  {
+    id: 2,
+    academy: "Code With Mosh",
+    time: "2023",
+    type: "Online Course",
+    content: ["Mastering Next.js 13 with TypeScript"],
+  },
+  {
+    id: 3,
+    academy: "Josh tried Coding",
+    time: "2023",
+    type: "Tutorial",
+    content: ["Next.js 14", "TypeScript", "React", "ReactQuery", "redis"],
+  },
+  {
+    id: 4,
+    academy: "Code With Mosh",
+    time: "2023",
+    type: "Online Course",
+    content: ["The Ultimate TypeScript Course"],
+  },
+  {
+    id: 5,
+    academy: "Code With Mosh",
+    time: "2023",
+    type: "Online Course",
+    content: ["Next.js Projects: Build an Issue Tracker"],
+  },
+];
