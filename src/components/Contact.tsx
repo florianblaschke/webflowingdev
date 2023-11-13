@@ -1,10 +1,5 @@
 "use client";
 
-import { useForm } from "react-hook-form";
-import { Button } from "./ui/Button";
-import { Input } from "./ui/Input";
-import * as z from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Form,
   FormControl,
@@ -14,17 +9,17 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/Form";
+import { Inputs, schema } from "@/lib/validators";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { SubmitHandler, useForm } from "react-hook-form";
+import * as z from "zod";
+import { Button } from "./ui/Button";
+import { Input } from "./ui/Input";
 import { Textarea } from "./ui/Textarea";
+import { sendEmail } from "@/lib/serverActions";
+import { useToast } from "./ui/Use-toast";
 
 export default function Contact() {
-  const schema = z.object({
-    name: z.string().min(1, { message: "Please enter a valid name" }),
-    email: z.string().min(1, { message: "Please enter a valid email" }),
-    message: z.string().min(20, { message: "That's too short..." }).max(255, {
-      message:
-        "For our first contact this message is too long. Let's talk more during a cup of coffee.",
-    }),
-  });
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -33,10 +28,26 @@ export default function Contact() {
       message: "",
     },
   });
-
-  function onSubmit() {
-    console.log("Yeah");
-  }
+  const { toast } = useToast();
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    const result = await sendEmail(data);
+    if (result?.success) {
+      form.reset();
+      return toast({
+        variant: "hulk",
+        title: "Thank you!",
+        description:
+          "I have received your request and will contact you shortly.",
+      });
+    }
+    if (!result?.success) {
+      return toast({
+        variant: "hulk",
+        title: "Oops. Something went wrong",
+        description: "Please try again!",
+      });
+    }
+  };
 
   return (
     <section className="min-h-fit pb-10 flex flex-col justify-center items-center">
@@ -73,7 +84,6 @@ export default function Contact() {
                   <FormLabel className="text-green-100">Email</FormLabel>
                   <FormControl>
                     <Input
-                      type="email"
                       placeholder="examplemail@someprovider.com"
                       {...field}
                     />

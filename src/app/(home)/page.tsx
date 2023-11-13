@@ -1,4 +1,5 @@
 import Contact from "@/components/Contact";
+import Courses from "@/components/Courses";
 import Footer from "@/components/Footer";
 import Game from "@/components/Games/TicTacToe/TicTacToe";
 import TechStack from "@/components/TechStack";
@@ -10,8 +11,10 @@ export default function Home() {
   return (
     <>
       <section className="bg-black">
-        <h1 className="px-10 pb-10 tracking-tighter text-[2.5rem] md:text-9xl bg-gradient-to-br from-green-400 to-green-100 bg-clip-text text-transparent">
-          Frontend and Fullstack Webdevelopment
+        <h1 className="px-10 pb-10 text-center tracking-tighter text-[2.5rem] md:text-9xl bg-gradient-to-br from-green-400 to-green-100 bg-clip-text text-transparent">
+          Frontend <br className="md:hidden" />
+          and Fullstack <br className="hidden md:box" />
+          Web Development
         </h1>
         <article className="h-96 flex flex-col items-center justify-center bg-gradient-to-br from-green-400 to-green-100 bg-clip-text text-transparent">
           <h2 className="text-xl font-normal text-center">
@@ -36,6 +39,7 @@ export default function Home() {
           ))}
         </article>
       </section>
+      <Courses />
       <section className="min-h-fit pb-10 flex flex-col justify-center items-center">
         <h3 className="p-10 text-5xl font-medium tracking-tighter bg-gradient-to-br from-green-400 to-green-100 bg-clip-text text-transparent">
           What I like to use
