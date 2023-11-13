@@ -128,6 +128,7 @@ export default function Game() {
       const slotsFromX = field.filter((entry) => entry.slot === "X");
       const slotsFromO = field.filter((entry) => entry.slot === "O");
 
+      //stop move if x already won
       const win = winningCombos.some((array) => {
         const xWins = array.every((cell) => field[cell].slot === "X");
         const oWins = array.every((cell) => field[cell].slot === "O");

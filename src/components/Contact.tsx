@@ -31,8 +31,7 @@ export default function Contact() {
   const { toast } = useToast();
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     const result = await sendEmail(data);
-    console.log(result);
-    /* if (result?.success) {
+    if (result?.success) {
       form.reset();
       return toast({
         variant: "hulk",
@@ -47,7 +46,7 @@ export default function Contact() {
         title: "Oops. Something went wrong",
         description: "Please try again!",
       });
-    } */
+    }
   };
 
   return (

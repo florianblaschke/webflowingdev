@@ -15,10 +15,10 @@ export async function sendEmail(data: Inputs) {
     const resend = new Resend(process.env.RESEND_API_KEY);
 
     await resend.emails.send({
-      from: "webflowingdevelopment.gmail.com",
+      from: "contact@webdevflow.de",
       to: [process.env.EMAIL!],
       subject: "Contact",
-      html: "Hello",
+      html: valid.data.message,
     });
 
     return { success: true };
