@@ -14,18 +14,29 @@ export const techstack = [
   { tech: "Tailwind", thumbnail: "tailwind", url: "https://tailwindcss.com/" },
 ];
 
-export const projects = [
+export const projects: {
+  name: string;
+  desc: string;
+  site: string;
+  repo: string;
+}[] = [
   {
     name: "Beanerd",
-    desc: "This was my exam project for 'neuefische'. It:&apos's an app for coffee enthusiasts which helps you recreating your favorite brews and discover new roasts.",
+    desc: "Exam-project for neuefische. For coffee enthusiasts which look for a simple way to save their brew recipes.",
+    site: "https://capstone-project-beanerd.vercel.app/",
+    repo: "https://github.com/florianblaschke/capstone-project-beanerd",
   },
   {
-    name: "E-Commerce",
-    desc: "A sample of an E-Commerce platform built with shopify",
+    name: "RepairDoc",
+    desc: "An app for organizing repairs for professional Barista Equipment.",
+    site: "https://repairdoc.vercel.app/",
+    repo: "https://github.com/florianblaschke/repairdoc",
   },
   {
-    name: "Homepage",
-    desc: "Your personal homepage! For your self, your company/restaurant! You name it!",
+    name: "Breadit",
+    desc: "A reddit clone from the course I took from Josh tried Coding.",
+    site: "https://breadit-clone-eight.vercel.app/",
+    repo: "https://github.com/florianblaschke/breadit-clone",
   },
 ];
 
@@ -46,7 +57,6 @@ export const courses: {
       "CSS",
       "JavaScript",
       "React",
-      "PairProgramming",
       "Node.js",
       "NoSQL",
       "REST",
@@ -54,6 +64,7 @@ export const courses: {
       "Git",
       "Tooling",
       "Agile Workflows",
+      "PairProgramming",
     ],
   },
   {
@@ -68,7 +79,7 @@ export const courses: {
     academy: "Josh tried Coding",
     time: "2023",
     type: "Tutorial",
-    content: ["Next.js 14", "TypeScript", "React", "ReactQuery", "redis"],
+    content: ["Next.js 13", "React", "TypeScript", "ReactQuery", "redis"],
   },
   {
     id: 4,

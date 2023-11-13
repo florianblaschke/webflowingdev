@@ -41,9 +41,9 @@ export default function Slot({
   function handleClick() {
     const newField = field.map((entry) => {
       if (entry.id === id && entry.slot === "") {
+        setTurn(turn === players.x ? players.y : players.x);
         return { ...entry, slot: turn.mark };
       }
-      setTurn(turn === players.x ? players.y : players.x);
       return entry;
     });
     setField(newField);
