@@ -40,6 +40,7 @@ export default function TechStackDesktop() {
                 <ListItem title="Visit">
                   <Link
                     href={entry.url}
+                    target="_blank"
                     className="flex justify-start items-center gap-1"
                   >
                     Visit their homepage to learn more{" "}
