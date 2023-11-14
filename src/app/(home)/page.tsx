@@ -12,8 +12,8 @@ export default function Home() {
       <Greeting />
       <Projects />
       <Courses />
-      <TechStack />
       <GameSection />
+      <TechStack />
       <Contact />
       <Footer />
     </>

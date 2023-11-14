@@ -38,6 +38,18 @@ export const projects: {
     site: "https://breadit-clone-eight.vercel.app/",
     repo: "https://github.com/florianblaschke/breadit-clone",
   },
+  {
+    name: "My Homepage",
+    desc: "What you see right now :)",
+    site: "https://webdevflow.de",
+    repo: "https://github.com/florianblaschke/webflowingdev",
+  },
+  {
+    name: "FakeTube",
+    desc: "Built this for practice with tailwind.css",
+    site: "",
+    repo: "https://github.com/florianblaschke/faketube",
+  },
 ];
 
 export const courses: {

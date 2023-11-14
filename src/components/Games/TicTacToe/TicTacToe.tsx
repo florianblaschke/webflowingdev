@@ -250,7 +250,7 @@ export default function Game() {
   return (
     <>
       {!play && (
-        <div>
+        <div className="pt-10">
           <Button
             onClick={() => setPlay(!play)}
             className="bg-black border-green-100 border"

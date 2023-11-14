@@ -8,22 +8,8 @@ export default function Greeting() {
         <span>Junior</span>
         <div className="flex justify-center items-center h-32 overflow-hidden max-w-[300px] md:max-w-[520px] md:min-w-[520px]">
           <motion.div
-            className="min-w-[840px] md:min-w-[1560px] overflow-clip shrink-0 flex justify-center"
+            className="min-w-[900px] md:min-w-[1590px] overflow-clip shrink-0 flex justify-center"
             animate={{
-              opacity: [
-                "100%",
-                "0%",
-                "100%",
-                "100%",
-                "0%",
-                "0%",
-                "100%",
-                "100%",
-                "0%",
-                "0%",
-                "100%",
-                "0%",
-              ],
               translateX: [
                 "0%",
                 "-33%",
@@ -36,33 +22,29 @@ export default function Greeting() {
                 "0%",
               ],
             }}
-            transition={{
-              ease: "easeIn",
-              duration: 9,
-              repeat: Infinity,
-              times: [3, 6, 9],
-            }}
+            transition={{ ease: "anticipate", duration: 10, repeat: Infinity }}
           >
-            <span className="min-w-[300px] md:min-w-[520px] relative bg-gradient-to-br from-green-400 to-green-100 bg-clip-text text-transparent">
+            <span className="min-w-[310px] md:min-w-[530px] relative bg-gradient-to-br from-green-400 to-green-100 bg-clip-text text-transparent">
               Frontend
             </span>
-            <span className="min-w-[300px] md:min-w-[520px] relative bg-gradient-to-br from-green-400 to-green-100 bg-clip-text text-transparent">
+            <span className="min-w-[310px] md:min-w-[530px] relative bg-gradient-to-br from-green-400 to-green-100 bg-clip-text text-transparent">
               Web
             </span>
-            <span className="min-w-[300px] w-fit md:min-w-[520px] relative bg-gradient-to-br from-green-400 to-green-100 bg-clip-text text-transparent">
+            <span className="min-w-[310px] w-fit md:min-w-[530px] relative bg-gradient-to-br from-green-400 to-green-100 bg-clip-text text-transparent">
               FullStack
             </span>
           </motion.div>
         </div>
         <span>Developer</span>
       </h1>
-      <article className="h-96 flex flex-col items-center justify-center bg-gradient-to-br from-green-400 to-green-100 bg-clip-text text-transparent">
+      <article className="h-96 flex flex-col items-center justify-center text-center text-xl bg-gradient-to-br from-green-400 to-green-100 bg-clip-text text-transparent">
         <h2 className="text-xl font-normal text-center">
-          Hi! I am Florian and I love coding and challenges ...and coffee!
+          I am Florian and I started my developer journey this year.
         </h2>
-        <p>
-          So feel free to challenge me to build your dream Website or even a
-          FullStack WebApp!
+        Besides being an enourmes coffee geek I work on becoming a total nerd in
+        Webdevelopment as well.
+        <p className="pt-5">
+          Currently I am looking for my first job – so maybe hire me?
         </p>
       </article>
     </section>
