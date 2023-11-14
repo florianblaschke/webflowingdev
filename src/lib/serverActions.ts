@@ -9,26 +9,23 @@ export async function sendEmail(data: Inputs) {
     const valid = schema.safeParse(data);
 
     if (!valid.success) {
-      console.log(valid.error);
       return { success: false };
     }
     const resend = new Resend(process.env.RESEND_API_KEY);
 
     await resend.emails.send({
-      from: "contact@webdevflow.de",
+      from: process.env.WEB_DEV_EMAIL!,
       to: [process.env.EMAIL!],
-      subject: "Contact from " + valid.data.email,
+      subject: "Contact from " + valid.data.name + " " + valid.data.email,
       html: valid.data.message,
     });
 
     return { success: true };
   } catch (error) {
     if (error instanceof Error) {
-      console.log(error);
       return { message: error.message };
     }
     if (error instanceof ZodError) {
-      console.log("zod", error);
       return { message: error.message };
     }
   }

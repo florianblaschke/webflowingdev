@@ -75,7 +75,7 @@ export const projects: {
   {
     name: "FakeTube",
     desc: "Built this for practice with tailwind.css",
-    site: "",
+    site: "https://faketube-drab.vercel.app/",
     repo: "https://github.com/florianblaschke/faketube",
   },
 ];
