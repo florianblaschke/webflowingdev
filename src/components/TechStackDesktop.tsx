@@ -18,7 +18,7 @@ import React from "react";
 
 export default function TechStackDesktop() {
   return (
-    <NavigationMenu className="pt-10">
+    <NavigationMenu className="pt-10 hidden md:block">
       <NavigationMenuList className="flex flex-row items-center justify-center gap-1 md:flex-row">
         {techstack.map((entry) => (
           <NavigationMenuItem key={entry.tech}>
@@ -55,7 +55,7 @@ export default function TechStackDesktop() {
   );
 }
 
-const ListItem = ({
+export const ListItem = ({
   children,
   title,
 }: {

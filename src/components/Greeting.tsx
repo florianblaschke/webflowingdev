@@ -37,7 +37,7 @@ export default function Greeting() {
         </div>
         <span>Developer</span>
       </h1>
-      <article className="h-96 flex flex-col items-center justify-center text-center text-xl bg-gradient-to-br from-green-400 to-green-100 bg-clip-text text-transparent">
+      <article className="h-96 px-10 flex flex-col items-center justify-center text-center text-xl bg-gradient-to-br from-green-400 to-green-100 bg-clip-text text-transparent">
         <h2 className="text-xl font-normal text-center">
           I am Florian and I started my developer journey this year.
         </h2>
