@@ -17,7 +17,7 @@ export async function sendEmail(data: Inputs) {
     await resend.emails.send({
       from: "contact@webdevflow.de",
       to: [process.env.EMAIL!],
-      subject: "Contact",
+      subject: "Contact from " + valid.data.email,
       html: valid.data.message,
     });
 

@@ -67,6 +67,10 @@
   scrollbar-width: none;
 }
 
+.snap-start {
+  scroll-snap-align: start;
+}
+
 *,
 ::after,
 ::before {
