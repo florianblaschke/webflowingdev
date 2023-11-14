@@ -1,17 +1,45 @@
-export const techstack = [
+export const techstack: {
+  tech: string;
+  thumbnail: string;
+  url: string;
+  title: string;
+  desc: string;
+}[] = [
   {
     tech: "Next.js",
     thumbnail: "next",
     url: "https://nextjs.org/",
+    title: "The React Framework for the Web",
+    desc: "Used by some of the world's largest companies, Next.js enables you to create full-stack Web applications by extending the latest React features.",
   },
-  { tech: "React", thumbnail: "react", url: "https://react.dev/" },
+  {
+    tech: "React",
+    thumbnail: "react",
+    url: "https://react.dev/",
+    title: "The library for web and native user interfaces",
+    desc: "Build user interfaces out of individual pieces called components. Create your own React components, then combine them into entire apps.",
+  },
   {
     tech: "TypeScript",
     thumbnail: "ts",
     url: "https://www.typescriptlang.org/",
+    title: "TypeScript is JavaScript with syntax for types.",
+    desc: "TypeScript is a strongly typed programming language that builds on JavaScript, giving you better tooling at any scale.",
   },
-  { tech: "Prisma", thumbnail: "prisma", url: "https://www.prisma.io/" },
-  { tech: "Tailwind", thumbnail: "tailwind", url: "https://tailwindcss.com/" },
+  {
+    tech: "Prisma",
+    thumbnail: "prisma",
+    url: "https://www.prisma.io/",
+    title: "Next-generation Node.js and TypeScript ORM",
+    desc: "Prisma unlocks a new level of developer experience when working with databases thanks to its intuitive data model &type-safety.",
+  },
+  {
+    tech: "Tailwind",
+    thumbnail: "tailwind",
+    url: "https://tailwindcss.com/",
+    title: "Rapidly build modern websites without ever leaving your HTML.",
+    desc: "A utility-first CSS framework packed with classes that can be composed to build any design, directly in your markup.",
+  },
 ];
 
 export const projects: {
