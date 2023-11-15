@@ -41,7 +41,7 @@ export default function Greeting() {
         <h2 className="text-xl font-normal text-center">
           I am Florian and I started my developer journey this year.
         </h2>
-        Besides being an enourmes coffee geek I work on becoming a total nerd in
+        Besides being an enormous coffee geek I work on becoming a total nerd in
         Webdevelopment as well.
         <p className="pt-5">
           Currently I am looking for my first job – so maybe hire me?

@@ -28,10 +28,7 @@ export default function TechStackDesktop() {
             <NavigationMenuContent>
               <ul className="grid gap-3 p-6 w-[832px] grid-cols-[.75fr_1fr]">
                 <li className="row-span-3">
-                  <NavigationMenuLink
-                    asChild
-                    className="flex justify-center items-center"
-                  >
+                  <NavigationMenuLink className="flex justify-center items-center">
                     <TechCard logo={entry.thumbnail} />
                   </NavigationMenuLink>
                 </li>

@@ -60,7 +60,13 @@ export default function Game() {
       const xWins = array.every((cell) => field[cell].slot === "X");
       const oWins = array.every((cell) => field[cell].slot === "O");
       let openSlots = field.filter((entry) => entry.slot === "");
-      if (openSlots.length === 0 && !xWins && !oWins) {
+
+      const win = winningCombos.some((array) => {
+        const xWins = array.every((cell) => field[cell].slot === "X");
+        const oWins = array.every((cell) => field[cell].slot === "O");
+        if (xWins || oWins) return true;
+      });
+      if (openSlots.length === 0 && !win) {
         return toast({
           variant: "hulk",
           title: "That's a draw!",
@@ -83,7 +89,7 @@ export default function Game() {
         setWinCount({ ...winCount, xCount: winCount.xCount + 1 });
         setWin(true);
         setPlayerWon("X");
-        const x = toast({
+        return toast({
           variant: "hulk",
           title: "You won!",
           description: "You are dominating!",
@@ -104,7 +110,7 @@ export default function Game() {
         setWinCount({ ...winCount, oCount: winCount.oCount + 1 });
         setWin(true);
         setPlayerWon("O");
-        const x = toast({
+        return toast({
           variant: "hulk",
           title: "AI beat you!",
           description: "World domination is next!",
@@ -250,7 +256,7 @@ export default function Game() {
   return (
     <>
       {!play && (
-        <div className="pt-10">
+        <div className="pt-10 ">
           <Button
             onClick={() => setPlay(!play)}
             className="bg-black border-green-100 border"

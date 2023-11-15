@@ -30,6 +30,12 @@ export default function Contact() {
   });
   const { toast } = useToast();
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    toast({
+      variant: "hulk",
+      title: "Processing...",
+      description: "Making a trip to the server...",
+    });
+
     const result = await sendEmail(data);
     if (result?.success) {
       form.reset();

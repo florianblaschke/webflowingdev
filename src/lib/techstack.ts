@@ -50,7 +50,7 @@ export const projects: {
 }[] = [
   {
     name: "Beanerd",
-    desc: "Exam-project for neuefische. For coffee enthusiasts which look for a simple way to save their brew recipes.",
+    desc: "Exam-project for neuefische. For coffee enthusiasts who look for a simple way to save their brew recipes.",
     site: "https://capstone-project-beanerd.vercel.app/",
     repo: "https://github.com/florianblaschke/capstone-project-beanerd",
   },
@@ -72,12 +72,12 @@ export const projects: {
     site: "https://webdevflow.de",
     repo: "https://github.com/florianblaschke/webflowingdev",
   },
-  {
+  /*   {
     name: "FakeTube",
     desc: "Built this for practice with tailwind.css",
     site: "https://faketube-drab.vercel.app/",
     repo: "https://github.com/florianblaschke/faketube",
-  },
+  }, */
 ];
 
 export const courses: {
