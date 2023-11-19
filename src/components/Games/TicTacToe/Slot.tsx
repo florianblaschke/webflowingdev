@@ -1,6 +1,6 @@
-import { Dispatch, JSXElementConstructor, SetStateAction } from "react";
-import { players } from "./TicTacToe";
 import { Circle, X } from "lucide-react";
+import { Dispatch, SetStateAction } from "react";
+import { players } from "./TicTacToe";
 
 const winningCombos = [
   [0, 1, 2],
@@ -51,6 +51,7 @@ export default function Slot({
 
   return (
     <div
+      id={`${id}`}
       /* @ts-ignore */
       onClick={!win ? handleClick : null}
       className="w-[6.5rem] h-[6.5rem] md:w-32 md:h-32 bg-green-100 rounded flex justify-center items-center"
