@@ -128,7 +128,7 @@ export default function Game() {
       boxOne!.classList.remove("animate-pulse");
       boxTwo!.classList.remove("animate-pulse");
       boxThree!.classList.remove("animate-pulse");
-    }, 3000);
+    }, 3400);
   }
 
   useEffect(() => {
@@ -223,7 +223,6 @@ export default function Game() {
         rdmMove();
       }, 400);
     }
-    return () => {};
   }, [turn]);
 
   return (
