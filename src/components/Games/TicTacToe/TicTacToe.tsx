@@ -28,16 +28,18 @@ export default function Game() {
   const [turn, setTurn] = useState(players.x);
   const [field, setField] = useState(slots);
   const [win, setWin] = useState(false);
-  const [winCount, setWinCount] = useState({ xCount: 0, oCount: 0 });
-  const [playerWon, setPlayerWon] = useState("");
   const [play, setPlay] = useState(false);
   const { toast } = useToast();
 
+  function reset() {
+    setTurn(players.x);
+    setField(slots);
+    setWin(false);
+  }
+
   function rdmMove() {
-    //Check for open slots
     const openSlots = field.filter((entry) => entry.slot === "");
     if (openSlots.length === 0) return;
-    //Make move on open rdm slot
     const rdm = Math.floor(Math.random() * openSlots.length);
     const move = field.map((entry) => {
       if (entry.id === openSlots[rdm].id) {
@@ -49,47 +51,95 @@ export default function Game() {
     setTurn(players.x);
   }
 
-  function reset() {
-    setTurn(players.x);
-    setField(slots);
-    setPlayerWon("");
-    setWin(false);
+  function checkForWin() {
+    const combo = winningCombos.filter(
+      (array) =>
+        array.every((cell) => field[cell].slot === "X") ||
+        array.every((cell) => field[cell].slot === "O")
+    );
+    if (combo.length === 1) {
+      const flatCombo = combo.flat();
+      return field[combo.flat()[0]].slot === "X"
+        ? { winner: "X", combo: flatCombo }
+        : { winner: "O", combo: flatCombo };
+    }
+    return false;
   }
-  useEffect(() => {
-    winningCombos.forEach((array) => {
-      const xWins = array.every((cell) => field[cell].slot === "X");
-      const oWins = array.every((cell) => field[cell].slot === "O");
-      let openSlots = field.filter((entry) => entry.slot === "");
 
-      const win = winningCombos.some((array) => {
-        const xWins = array.every((cell) => field[cell].slot === "X");
-        const oWins = array.every((cell) => field[cell].slot === "O");
-        if (xWins || oWins) return true;
+  function winningChance(
+    slotsFrom: {
+      id: number;
+      slot: string;
+    }[]
+  ) {
+    return winningCombos.map((arr) => {
+      let comboBreak: number[] = [];
+      arr.map((cell) => {
+        let step = slotsFrom.find((slot) => slot.id === cell);
+        if (step) comboBreak.push(step.id);
       });
-      if (openSlots.length === 0 && !win) {
-        return toast({
-          variant: "hulk",
-          title: "That's a draw!",
-          description: "You are on par with AI!",
-          action: (
-            <ToastAction
-              altText="New Round"
-              onClick={() => {
-                setPlay(true);
-                reset();
-              }}
-            >
-              New Round?
-            </ToastAction>
-          ),
-        });
-      }
+      return comboBreak;
+    });
+  }
 
-      if (xWins) {
-        setWinCount({ ...winCount, xCount: winCount.xCount + 1 });
-        setWin(true);
-        setPlayerWon("X");
-        return toast({
+  function getMissingSlots(winChances: number[][]) {
+    return winChances
+      .map((entry) => {
+        const combo = winningCombos.find(
+          (combo) => combo.includes(entry[0]) && combo.includes(entry[1])
+        );
+        return combo?.filter((num) => num !== entry[0] && num !== entry[1]);
+      })
+      .flat();
+  }
+
+  function checkSlotsOpen(
+    openSlots: typeof field,
+    slotForWin: (number | undefined)[]
+  ) {
+    return openSlots
+      .filter(
+        (entry) =>
+          entry.id === slotForWin[0] ||
+          entry.id === slotForWin[1] ||
+          entry.id === slotForWin[2]
+      )
+      .map((entry) => entry.id);
+  }
+
+  function move(slot: number) {
+    return field.map((entry) => {
+      if (entry.id === slot && entry.slot === "") {
+        setTurn(players.x);
+        return { ...entry, slot: turn.mark };
+      }
+      return entry;
+    });
+  }
+
+  function animate(array: number[]) {
+    const boxOne = document.getElementById(array[0].toString());
+    const boxTwo = document.getElementById(array[1].toString());
+    const boxThree = document.getElementById(array[2].toString());
+    boxOne!.classList.add("animate-pulse");
+    boxTwo!.classList.add("animate-pulse");
+    boxThree!.classList.add("animate-pulse");
+    setTimeout(() => {
+      boxOne!.classList.remove("animate-pulse");
+      boxTwo!.classList.remove("animate-pulse");
+      boxThree!.classList.remove("animate-pulse");
+    }, 3400);
+  }
+
+  useEffect(() => {
+    const openSlots = field.filter((entry) => entry.slot === "");
+    const isWin = checkForWin();
+
+    if (isWin) {
+      setWin(true);
+      if (isWin.winner === "X") {
+        animate(isWin.combo);
+        toast({
           variant: "hulk",
           title: "You won!",
           description: "You are dominating!",
@@ -106,13 +156,11 @@ export default function Game() {
           ),
         });
       }
-      if (oWins) {
-        setWinCount({ ...winCount, oCount: winCount.oCount + 1 });
-        setWin(true);
-        setPlayerWon("O");
-        return toast({
+      if (isWin.winner === "O") {
+        animate(isWin.combo);
+        toast({
           variant: "hulk",
-          title: "AI beat you!",
+          title: "AI won!",
           description: "World domination is next!",
           action: (
             <ToastAction
@@ -127,129 +175,53 @@ export default function Game() {
           ),
         });
       }
-    });
+    }
+    if (openSlots.length === 0 && !isWin) {
+      toast({
+        variant: "hulk",
+        title: "That's a draw!",
+        description: "You are on par with AI!",
+        action: (
+          <ToastAction
+            altText="New Round"
+            onClick={() => {
+              setPlay(true);
+              reset();
+            }}
+          >
+            New Round?
+          </ToastAction>
+        ),
+      });
+    }
 
-    if (turn === players.y) {
-      //find all slots marked by X and O
+    if (turn === players.y && !isWin) {
       const slotsFromX = field.filter((entry) => entry.slot === "X");
       const slotsFromO = field.filter((entry) => entry.slot === "O");
 
-      //stop move if x already won
-      const win = winningCombos.some((array) => {
-        const xWins = array.every((cell) => field[cell].slot === "X");
-        const oWins = array.every((cell) => field[cell].slot === "O");
-        if (xWins || oWins) return true;
-      });
-      if (win) return;
-      //determine if X is near win
-      let winningChancesX = winningCombos.map((arr) => {
-        let comboBreak: number[] = [];
-        arr.map((cell) => {
-          let step = slotsFromX.find((slot) => slot.id === cell);
-          if (step) comboBreak.push(step.id);
-        });
-        return comboBreak;
-      });
-      let winX = winningChancesX.some((entry) => entry.length === 2);
-      //determine if O is near win
-      let winningChancesO = winningCombos.map((arr) => {
-        let winChance: number[] = [];
-        arr.map((cell) => {
-          let step = slotsFromO.find((slot) => slot.id === cell);
-          if (step) winChance.push(step.id);
-        });
-        return winChance;
-      });
-      let winO = winningChancesO.some((entry) => entry.length === 2);
-
-      //The Moves
-      //Countermove
-      if (winX) {
-        const possibleCombos = winningChancesX.filter(
-          (entry) => entry.length === 2
-        );
-        //Get missing Cell from all possible Combos
-        const winCombs = winningCombos.map((arr) => {
-          const stepsFromWin = possibleCombos.map((poss) => {
-            return arr.filter((num) => num !== poss[0] && num !== poss[1]);
-          });
-          return stepsFromWin;
-        });
-        //Filter winCombs for length 1 to get field for Countermove
-        const needToCounter = winCombs
-          .map((entry) => entry.filter((cell) => cell.length === 1))
-          .flat(2);
-        //Check if needToCounter fields are open and set new Field
-        const fieldsOpen = field
-          .map((entry) => {
-            return needToCounter.filter(
-              (cell) => entry.id === cell && entry.slot === ""
-            );
-          })
-          .flat();
-        if (fieldsOpen.length === 0) {
-          rdmMove();
-        }
-        if (fieldsOpen.length > 0) {
-          const counterMove = field.map((entry) => {
-            if (entry.id === fieldsOpen[0]) {
-              return { ...entry, slot: "O" };
-            }
-            return entry;
-          });
-          setField(counterMove);
-          setTurn(players.x);
-        }
-      }
-
-      let slotTaken = true;
-      //Move for win
-      if (winO) {
-        const possibleCombos = winningChancesO.filter(
-          (entry) => entry.length === 2
-        );
-        //Get missing Cell from all possible Combos
-        const winCombs = winningCombos.map((arr) => {
-          const stepsFromWin = possibleCombos.map((poss) => {
-            return arr.filter((num) => num !== poss[0] && num !== poss[1]);
-          });
-          return stepsFromWin;
-        });
-        //Filter winCombs for length 1 to get field for winning Move
-        const possibleWin = winCombs
-          .map((entry) => entry.filter((cell) => cell.length === 1))
-          .flat(2);
-        //Check if possibleWin fields are open and set new Field
-        const slotsOpen = field.filter((entry) => entry.slot === "");
-        slotTaken = slotsOpen.some((entry) => entry.id !== possibleWin[0]);
-        if (slotTaken) {
-          const fieldsOpen = field
-            .map((entry) => {
-              return possibleWin.filter(
-                (cell) => entry.id === cell && entry.slot === ""
-              );
-            })
-            .flat();
-          if (fieldsOpen.length === 0) {
-            rdmMove();
+      const winChanceX = winningChance(slotsFromX).filter(
+        (entry) => entry.length === 2
+      );
+      const winChanceO = winningChance(slotsFromO).filter(
+        (entry) => entry.length === 2
+      );
+      setTimeout(() => {
+        if (winChanceX.length >= 1 || winChanceO.length >= 1) {
+          const slotsForXWin = getMissingSlots(winChanceX);
+          const slotsForOWin = getMissingSlots(winChanceO);
+          const slotsNeedToCounter = checkSlotsOpen(openSlots, slotsForXWin);
+          const slotsToWin = checkSlotsOpen(openSlots, slotsForOWin);
+          if (slotsToWin.length >= 1) {
+            const winningMove = move(slotsToWin[0]);
+            return setField(winningMove);
           }
-          if (fieldsOpen.length > 0) {
-            const goForWin = field.map((entry) => {
-              if (entry.id === fieldsOpen[0]) {
-                return { ...entry, slot: "O" };
-              }
-              return entry;
-            });
-            setField(goForWin);
-            setTurn(players.x);
+          if (slotsNeedToCounter.length >= 1) {
+            const counterMove = move(slotsNeedToCounter[0]);
+            return setField(counterMove);
           }
         }
-      }
-
-      //Rdm move
-      if (!winX && !winO && slotTaken) {
         rdmMove();
-      }
+      }, 400);
     }
   }, [turn]);
 
