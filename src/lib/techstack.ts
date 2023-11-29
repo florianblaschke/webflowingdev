@@ -64,7 +64,7 @@ export const projects: {
     name: "Breadit",
     desc: "A reddit clone from the course I took from Josh tried Coding.",
     site: "https://breadit-clone-eight.vercel.app/",
-    repo: "https://github.com/florianblaschke/breadit-clone",
+    repo: "https://github.com/florianblaschke/breadit_clone",
   },
   {
     name: "My Homepage",
