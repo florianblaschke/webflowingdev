@@ -1,5 +1,7 @@
 "use client";
 import { motion } from "framer-motion";
+import { buttonVariants } from "./ui/Button";
+import { cn } from "@/lib/utils";
 
 export default function Greeting() {
   return (
@@ -43,9 +45,14 @@ export default function Greeting() {
         </h2>
         Besides being an enormous coffee geek I work on becoming a total nerd in
         Webdevelopment as well.
-        <p className="pt-5">
-          Currently I am looking for my first job – so maybe hire me?
-        </p>
+        <p className="py-4">Currently I am working at </p>
+        <a
+          className="font-bold text-2xl w-96 text-gradient bg-gradient-to-br from-green-400 to-green-100 bg-clip-text text-transparent"
+          target="blank"
+          href="https://www.forsuxess.de"
+        >
+          for suxess
+        </a>
       </article>
     </section>
   );

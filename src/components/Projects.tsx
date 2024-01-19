@@ -1,6 +1,5 @@
 import { projects } from "@/lib/techstack";
 import { ExternalLink, GithubIcon } from "lucide-react";
-import Link from "next/link";
 
 export default function Projects() {
   return (
@@ -23,14 +22,16 @@ export default function Projects() {
               </p>
               <div className="flex self-end">
                 <span className=" text-green-100">
-                  <Link href={entry.repo} target="_blank">
+                  <a href={entry.repo} target="_blank">
                     <GithubIcon size={22} />
-                  </Link>
+                  </a>
                 </span>
                 <span className=" text-green-100">
-                  <Link href={entry.site} target="_blank">
-                    <ExternalLink size={22} />
-                  </Link>
+                  {entry.site && (
+                    <a href={entry.site} target="_blank">
+                      <ExternalLink size={22} />
+                    </a>
+                  )}
                 </span>
               </div>
             </li>

@@ -45,7 +45,7 @@ export const techstack: {
 export const projects: {
   name: string;
   desc: string;
-  site: string;
+  site?: string;
   repo: string;
 }[] = [
   {
@@ -63,7 +63,7 @@ export const projects: {
   {
     name: "Breadit",
     desc: "A reddit clone from the course I took from Josh tried Coding.",
-    site: "https://breadit-clone-eight.vercel.app/",
+    site: "",
     repo: "https://github.com/florianblaschke/breadit_clone",
   },
   {
@@ -72,12 +72,6 @@ export const projects: {
     site: "https://webdevflow.de",
     repo: "https://github.com/florianblaschke/webflowingdev",
   },
-  /*   {
-    name: "FakeTube",
-    desc: "Built this for practice with tailwind.css",
-    site: "https://faketube-drab.vercel.app/",
-    repo: "https://github.com/florianblaschke/faketube",
-  }, */
 ];
 
 export const courses: {
