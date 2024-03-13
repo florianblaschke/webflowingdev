@@ -18,6 +18,7 @@ import { Input } from "./ui/Input";
 import { Textarea } from "./ui/Textarea";
 import { sendEmail } from "@/lib/serverActions";
 import { useToast } from "./ui/Use-toast";
+import { sendGTMEvent } from "@next/third-parties/google";
 
 export default function Contact() {
   const form = useForm<z.infer<typeof schema>>({
@@ -30,6 +31,7 @@ export default function Contact() {
   });
   const { toast } = useToast();
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    sendGTMEvent({ event: "formSubmit", value: data.email });
     toast({
       variant: "hulk",
       title: "Processing...",

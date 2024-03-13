@@ -5,6 +5,7 @@ import { useToast } from "@/components/ui/Use-toast";
 import { ToastAction } from "@radix-ui/react-toast";
 import { useEffect, useState } from "react";
 import Slot from "./Slot";
+import { sendGTMEvent } from "@next/third-parties/google";
 
 const slots = Array.from({ length: 9 }).map((x, i) => ({ id: i, slot: "" }));
 
@@ -230,7 +231,13 @@ export default function Game() {
       {!play && (
         <div className="pt-10 ">
           <Button
-            onClick={() => setPlay(!play)}
+            onClick={() => {
+              sendGTMEvent({
+                event: "game",
+                value: "start",
+              });
+              setPlay(!play);
+            }}
             className="bg-black border-green-100 border"
           >
             <span className="from-green-300 to-green-200 bg-clip-text bg-gradient-to-br text-transparent">
@@ -262,6 +269,10 @@ export default function Game() {
           </Button>
           <Button
             onClick={() => {
+              sendGTMEvent({
+                event: "game",
+                value: "end",
+              });
               reset(), setPlay(false);
             }}
             className="bg-black border-green-100 border"
