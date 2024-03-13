@@ -2,6 +2,7 @@ import "@/app/globals.css";
 import { Toaster } from "@/components/ui/Toaster";
 import { GeistSans } from "geist/font";
 import type { Metadata } from "next";
+import { GoogleTagManager } from "@next/third-parties/google";
 
 export const metadata: Metadata = {
   title: "Florian Blaschke",
@@ -21,6 +22,7 @@ export default function RootLayout({
         </main>
         <Toaster />
       </body>
+      <GoogleTagManager gtmId="G-72YVRX544C" />
     </html>
   );
 }
