@@ -22,7 +22,7 @@ export default function RootLayout({
         </main>
         <Toaster />
       </body>
-      <GoogleTagManager gtmId="G-72YVRX544C" />
+      <GoogleTagManager gtmId="GTM-52C4NWTM" />
     </html>
   );
 }
