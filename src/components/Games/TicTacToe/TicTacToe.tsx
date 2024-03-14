@@ -234,7 +234,7 @@ export default function Game() {
             onClick={() => {
               sendGTMEvent({
                 event: "game",
-                value: "start",
+                game: "start",
               });
               setPlay(!play);
             }}
@@ -271,7 +271,7 @@ export default function Game() {
             onClick={() => {
               sendGTMEvent({
                 event: "game",
-                value: "end",
+                game: "end",
               });
               reset(), setPlay(false);
             }}
