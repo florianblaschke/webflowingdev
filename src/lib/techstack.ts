@@ -46,24 +46,27 @@ export const projects: {
   name: string;
   desc: string;
   site?: string;
-  repo: string;
+  repo?: string;
 }[] = [
   {
+    name: "Bonani Drop in Centre",
+    desc: "Website for a Charity Organisation which helps children in Africa",
+    site: "https://bonanihope.org",
+  },
+  {
     name: "Beanerd",
-    desc: "Exam-project for neuefische. For coffee enthusiasts who look for a simple way to save their brew recipes.",
+    desc: "Exam-project for neuefische. For coffee enthusiasts who look for a simple way to save their brew recipes. Optimized for mobile screens.",
     site: "https://capstone-project-beanerd.vercel.app/",
     repo: "https://github.com/florianblaschke/capstone-project-beanerd",
   },
   {
     name: "RepairDoc",
     desc: "An app for organizing repairs for professional Barista Equipment.",
-    site: "https://repairdoc.vercel.app/",
     repo: "https://github.com/florianblaschke/repairdoc",
   },
   {
     name: "Breadit",
     desc: "A reddit clone from the course I took from Josh tried Coding.",
-    site: "",
     repo: "https://github.com/florianblaschke/breadit_clone",
   },
   {

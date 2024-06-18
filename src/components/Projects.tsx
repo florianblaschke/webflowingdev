@@ -12,20 +12,20 @@ export default function Projects() {
           return (
             <li
               key={entry.name}
-              className="flex flex-col p-2 min-w-[216px] max-w-[216px]"
+              className="flex flex-col p-2 min-w-[216px] max-w-[216px] min-h-[200px] justify-between"
             >
-              <div className="flex justify-between">
-                <h4 className=" text-green-100 text-2xl">{entry.name}</h4>
-              </div>
+              <h4 className=" text-green-100 text-2xl">{entry.name}</h4>
               <p className=" text-green-100 max-w-[200px] h-24 text-sm">
                 {entry.desc}
               </p>
               <div className="flex self-end">
-                <span className=" text-green-100">
-                  <a href={entry.repo} target="_blank">
-                    <GithubIcon size={22} />
-                  </a>
-                </span>
+                {entry.repo && (
+                  <span className=" text-green-100">
+                    <a href={entry.repo} target="_blank">
+                      <GithubIcon size={22} />
+                    </a>
+                  </span>
+                )}
                 <span className=" text-green-100">
                   {entry.site && (
                     <a href={entry.site} target="_blank">
